@@ -7,5 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Use a process manager to run both FastAPI and Streamlit
-CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port 8080 & streamlit run ui.py --server.port 8081 --server.headless true"]
+CMD ["streamlit", "run", "ui.py", "--server.port=8080", "--server.headless=true"]
