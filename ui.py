@@ -1,31 +1,27 @@
+import os
+from dotenv import load_dotenv
 import streamlit as st
-import requests
+
+from langchain_openai import ChatOpenAI
+from langchain.agents import initialize_agent, Tool
+from langchain.agents.agent_types import AgentType
+from langchain.tools import DuckDuckGoSearchRun
+
+load_dotenv()
 
 st.set_page_config(page_title="Despina", page_icon="🧠")
-
 st.title("🧠 Despina: Agent Experience Demo")
-st.markdown("This prototype monitors how agents reason, interact, and break. It sends each prompt to a deployed LangChain agent running with real-time observability in [LangSmith](https://smith.langchain.com).")
+st.markdown("This prototype lets you observe agent behavior and trust integrity, with LangSmith traces in the background.")
 
-st.markdown("---")
-
-question = st.text_input("Enter a prompt for the agent:")
-run_button = st.button("Send to Agent")
+question = st.text_input("Ask the agent anything:", "")
+run_button = st.button("Run Agent")
 
 if run_button and question:
-    with st.spinner("Agent thinking..."):
-        try:
-            response = requests.post(
-                "http://localhost:8080/ask",  # Internal to container
-                json={"question": question},
-                timeout=20
-            )
-            if response.status_code == 200:
-                agent_reply = response.json().get("response", "")
-                st.success(agent_reply)
-
-                # Placeholder trace link (manual for now)
-                st.markdown("🔍 View trace in [LangSmith](https://smith.langchain.com/o/projects)")
-            else:
-                st.error(f"Agent failed with status code {response.status_code}")
-        except Exception as e:
-            st.error(f"Error: {e}")
+    with st.spinner("Thinking..."):
+        llm = ChatOpenAI(temperature=0)
+        search = DuckDuckGoSearchRun()
+        tools = [Tool(name="Search", func=search.run, description="Search for current events")]
+        agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
+        result = agent.run(question)
+        st.success(result)
+        st.markdown("🔍 [View LangSmith Traces](https://smith.langchain.com/o/projects)")
