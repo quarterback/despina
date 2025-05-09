@@ -1,3 +1,7 @@
+import os
+os.environ["LANGSMITH_PROJECT"] = "despina"
+
+
 import streamlit as st
 from langchain_openai import ChatOpenAI
 from langchain.agents import initialize_agent, Tool
