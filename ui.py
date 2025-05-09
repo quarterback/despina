@@ -1,6 +1,7 @@
 import os
 os.environ["LANGSMITH_PROJECT"] = "despina"
-
+os.environ["LANGSMITH_TRACING"] = "true"
+os.environ["LANGSMITH_ENDPOINT"] = "https://api.smith.langchain.com"
 
 import streamlit as st
 from langchain_openai import ChatOpenAI
