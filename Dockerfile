@@ -7,4 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+# force use of correct port inside Fly
+ENV PORT 8080
+
 CMD ["streamlit", "run", "ui.py"]
