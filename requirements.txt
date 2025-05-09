@@ -2,5 +2,4 @@ langchain
 langchain-openai
 python-dotenv
 duckduckgo-search
-fastapi
-uvicorn
+streamlit
