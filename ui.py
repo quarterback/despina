@@ -1,4 +1,6 @@
 import os
+os.environ["STREAMLIT_SERVER_PORT"] = "8080"
+os.environ["STREAMLIT_SERVER_HEADLESS"] = "true"
 from dotenv import load_dotenv
 import streamlit as st
 
